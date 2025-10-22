@@ -1,4 +1,4 @@
-import type { Note } from "../types/note";
+import type { Note } from "../lib/types";
 import axios from "axios";
 
 const api = axios.create({
@@ -44,4 +44,9 @@ export const createNote = async (noteData: {
   {
     return res.data;
   }
+};
+
+export const fetchNoteById = async (id: string) => {
+  const { data } = await axios.get<Note>(`/notes/${id}`);
+  return data;
 };
