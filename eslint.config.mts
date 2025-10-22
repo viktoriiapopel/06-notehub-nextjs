@@ -1,49 +1,37 @@
+// @ts-nocheck
+
 import js from "@eslint/js";
-import globals from "globals";
 import tseslint from "typescript-eslint";
-import pluginReact from "eslint-plugin-react";
-import pluginNext from "@next/eslint-plugin-next";
-import prettier from "eslint-config-prettier";
+import react from "eslint-plugin-react";
+import next from "@next/eslint-plugin-next";
+import prettierConfig from "eslint-config-prettier";
 
-export default [
-  // Базові правила JS
-  js.configs.recommended,
-
-  // Налаштування для всіх типів файлів
+export default tseslint.config([
   {
-    files: ["**/*.{js,cjs,mjs,ts,cts,mts,jsx,tsx}"],
+    ignores: ["node_modules", ".next", "dist"],
+  },
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
     languageOptions: {
-      parser: tseslint.parser,
       parserOptions: {
-        ecmaVersion: "latest",
-        sourceType: "module",
-        project: ["./tsconfig.json"], // важливо для TypeScript
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
+        project: "./tsconfig.json",
       },
     },
     plugins: {
-      "@typescript-eslint": tseslint.plugin,
-      react: pluginReact,
-      "@next/next": pluginNext,
+      react,
+      next,
     },
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      react.configs.flat.recommended, // ✅ новий синтаксис ESLint 9
+      next.configs.recommended,
+      prettierConfig, // ✅ підключаємо Prettier як flat-config
+    ],
     rules: {
-      // Рекомендовані правила TypeScript
-      ...tseslint.configs.recommended.rules,
-
-      // Рекомендовані правила React
-      ...pluginReact.configs.recommended.rules,
-
-      // Рекомендовані правила Next.js
-      ...pluginNext.configs.recommended.rules,
-
-      // Додаткові правила
-      "react/react-in-jsx-scope": "off", // Не потрібне в Next.js
+      "react/react-in-jsx-scope": "off", // не потрібно в Next.js
+      "react/jsx-uses-react": "off",
+      "react/prop-types": "off",
     },
   },
-
-  // Вимикаємо конфлікти з Prettier
-  prettier,
-];
+]);
