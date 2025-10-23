@@ -1,12 +1,12 @@
-("use client");
+"use client";
 
-import EditNoteForm from "@/components/EditNoteForm/EditNoteForm";
+import NoteForm from "@/components/NoteForm/NoteForm";
 import { fetchNoteById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
-const Notesclient = () => {
+const NotesСlient = () => {
   const { noteId } = useParams<{ noteId: string }>();
   const [isEditingMode, setIsEditingMode] = useState(false);
 
@@ -32,11 +32,11 @@ const Notesclient = () => {
         </>
       ) : (
         note && (
-          <EditNoteForm note={note} closeForm={() => setIsEditingMode(false)} />
+          <NoteForm note={note} closeForm={() => setIsEditingMode(false)} />
         )
       )}
     </>
   );
 };
 
-export default Notesclient;
+export default NotesСlient;

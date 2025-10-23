@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import css from "./App.module.css";
+import css from "./NotesPage.module.css";
 
 import Modal from "../../components/Modal/Modal";
 import NoteForm from "../../components/NoteForm/NoteForm";
