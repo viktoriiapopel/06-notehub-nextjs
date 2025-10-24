@@ -1,6 +1,6 @@
 "use client";
 
-import NoteForm from "@/components/NoteForm/NoteForm";
+import NoteDetailsClient from "./[noteid]/NoteDetailsClient";
 import { fetchNoteById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -31,9 +31,7 @@ const NotesСlient = () => {
           <button onClick={() => setIsEditingMode(true)}>Edit</button>
         </>
       ) : (
-        note && (
-          <NoteForm note={note} closeForm={() => setIsEditingMode(false)} />
-        )
+        note && <NoteDetailsClient />
       )}
     </>
   );

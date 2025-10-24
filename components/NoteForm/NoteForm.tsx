@@ -4,12 +4,14 @@ import css from "./NoteForm.module.css";
 import { createNote } from "../../lib/api";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Note } from "../../lib/types";
 
 interface NoteFormProps {
+  note?: Note;
   onClose: () => void;
 }
 
-export default function NoteForm({ onClose }: NoteFormProps) {
+export default function NoteForm({ note, onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
