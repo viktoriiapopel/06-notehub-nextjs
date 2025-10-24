@@ -47,6 +47,6 @@ export const createNote = async (noteData: {
 };
 
 export const fetchNoteById = async (id: string) => {
-  const { data } = await axios.get<Note>(`/notes/${id}`);
-  return data;
+  const res = await api.get<Note>(`/notes/${id}`);
+  return res.data;
 };
