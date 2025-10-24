@@ -11,7 +11,7 @@ import NoteList from "../../components/NoteList/NoteList";
 import Pagination from "../../components/Pagination/Pagination";
 import SearchBox from "../../components/SearchBox/SearchBox";
 import { fetchNotes } from "../../lib/api";
-import type { Note } from "../../lib/types";
+import type { Note } from "../../types/note";
 
 export default function App() {
   const [search, setSearch] = useState("");

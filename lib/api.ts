@@ -1,4 +1,4 @@
-import type { Note } from "../lib/types";
+import type { Note } from "../types/note";
 import axios from "axios";
 
 const api = axios.create({
