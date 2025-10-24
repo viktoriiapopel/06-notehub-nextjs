@@ -19,10 +19,6 @@ export default function NoteDetailsClient({ noteId }: NoteDetailsClientProps) {
     enabled: !!noteId,
   });
 
-  console.log("noteId:", noteId);
-  console.log("note data:", note);
-  console.log("error?", isError);
-
   if (isLoading) return <p>Loading, please wait...</p>;
   if (isError || !note) return <p>Something went wrong.</p>;
 
