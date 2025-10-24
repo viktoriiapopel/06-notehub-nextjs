@@ -25,7 +25,7 @@ export default function App() {
     setPage(1); // Скидаємо сторінку
   };
 
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useQuery({
     queryKey: ["notes", debouncedSearch, page],
     queryFn: () => fetchNotes({ page, perPage: 12, search: debouncedSearch }),
     placeholderData: keepPreviousData,
