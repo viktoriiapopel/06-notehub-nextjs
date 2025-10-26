@@ -25,7 +25,7 @@ export default function App() {
     setPage(1); // Скидаємо сторінку
   };
 
-  const { data } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["notes", debouncedSearch, page],
     queryFn: () => fetchNotes({ page, perPage: 12, search: debouncedSearch }),
     placeholderData: keepPreviousData,
@@ -35,6 +35,18 @@ export default function App() {
 
   const notes: Note[] = data?.notes ?? [];
   const totalPages = data?.totalPages ?? 1;
+  if (isLoading) {
+    return <p className={css.loading}>Loading notes...</p>;
+  }
+
+  if (isError) {
+    return (
+      <div className={css.errorBox}>
+        <p className={css.errorTitle}>Failed to load notes 😢</p>
+        <p className={css.errorMessage}>{(error as Error).message}</p>
+      </div>
+    );
+  }
 
   return (
     <div className={css.app}>

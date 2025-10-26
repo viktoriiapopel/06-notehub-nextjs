@@ -13,14 +13,24 @@ export default function NoteDetailsClient({ noteid }: NoteDetailsClientProps) {
     data: note,
     isLoading,
     isError,
+    error,
   } = useQuery({
     queryKey: ["note", noteid],
     queryFn: () => fetchNoteById(noteid),
     enabled: !!noteid,
+    refetchOnMount: false,
   });
 
   if (isLoading) return <p>Loading, please wait...</p>;
-  if (isError || !note) return <p>Something went wrong.</p>;
+  if (isError)
+    return (
+      <div className={css.errorBox}>
+        <p className={css.errorTitle}>Something went wrong 😢</p>
+        <p className={css.errorMessage}>{(error as Error).message}</p>
+      </div>
+    );
+
+  if (!note) return <p>No note found with this ID.</p>;
 
   return (
     <div className={css.container}>
