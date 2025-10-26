@@ -1,64 +1,24 @@
-"use client";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { fetchNotes } from "@/lib/api";
+import NotesClient from "./Notes.client";
 
-import { useState } from "react";
-import { useDebounce } from "use-debounce";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import css from "./NotesPage.module.css";
+export default async function NotesPage() {
+  const queryClient = new QueryClient();
 
-import Modal from "../../components/Modal/Modal";
-import NoteForm from "../../components/NoteForm/NoteForm";
-import NoteList from "../../components/NoteList/NoteList";
-import Pagination from "../../components/Pagination/Pagination";
-import SearchBox from "../../components/SearchBox/SearchBox";
-import { fetchNotes } from "../../lib/api";
-import type { Note } from "../../types/note";
-
-export default function App() {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [showModal, setShowModal] = useState(false);
-
-  const [debouncedSearch] = useDebounce(search, 500);
-
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    setPage(1); // Скидаємо сторінку
-  };
-
-  const { data } = useQuery({
-    queryKey: ["notes", debouncedSearch, page],
-    queryFn: () => fetchNotes({ page, perPage: 12, search: debouncedSearch }),
-    placeholderData: keepPreviousData,
+  // Prefetch даних на сервері
+  await queryClient.prefetchQuery({
+    queryKey: ["notes"],
+    queryFn: () => fetchNotes({ page: 1, perPage: 12, search: "" }),
   });
 
-  console.log(" data from query:", data);
-
-  const notes: Note[] = data?.notes ?? [];
-  const totalPages = data?.totalPages ?? 1;
-
+  // Повертаємо клієнтський компонент з гідратацією
   return (
-    <div className={css.app}>
-      <header className={css.toolbar}>
-        <SearchBox value={search} onChange={handleSearchChange} />
-
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
-        )}
-
-        <button className={css.button} onClick={() => setShowModal(true)}>
-          Create note +
-        </button>
-      </header>
-      {notes.length > 0 && <NoteList notes={notes} />}
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <NoteForm onClose={() => setShowModal(false)} />
-        </Modal>
-      )}
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotesClient />
+    </HydrationBoundary>
   );
 }
